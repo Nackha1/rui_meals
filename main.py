@@ -68,7 +68,7 @@ def main():
     start_date = get_date("Starting")
     end_date = get_date("Ending")
     delta = end_date - start_date
-    csv_file = "Presenze.csv"
+    csv_file = "meals.csv"
     csv_columns = ["nome", f"pranzo({start_date})", f"cena({start_date})"]
     context = ssl._create_unverified_context()
     res = []

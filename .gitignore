@@ -1,4 +1,4 @@
-Presenze.csv
-rui_meals.spec
+*.csv
+*.spec
 build/
 dist/
