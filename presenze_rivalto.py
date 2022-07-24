@@ -7,6 +7,7 @@ import csv
 
 def get_date(msg):
     input_str = str(input(f"{msg} date: "))
+
     try:
         date = datetime.strptime(input_str, "%Y-%m-%d")
     except ValueError:
@@ -17,8 +18,13 @@ def get_date(msg):
     return date.date()
 
 
-def fetch_json(date, context):
-    url = f"http://mycollegeapp.rui.it/jsonapi?residenza=cml2YWx0bw-&data={date}"
+def get_residence_code():
+    input_str = str(input("Residence public code: "))
+    return input_str
+
+
+def fetch_json(code, date, context):
+    url = f"http://mycollegeapp.rui.it/jsonapi?residenza={code}&data={date}"
     response = urlopen(url, context=context)
     json_data = json.loads(response.read())
     return json_data
@@ -58,6 +64,7 @@ def merge(final_data, temp_data, day):
 
 def main():
     print("<?> Date formatting: YYYY-MM-DD")
+    res_code = get_residence_code()
     start_date = get_date("Starting")
     end_date = get_date("Ending")
     delta = end_date - start_date
@@ -67,11 +74,11 @@ def main():
     res = []
 
     start_time = datetime.now()
-    res = clean(fetch_json(start_date, context), start_date)
+    res = clean(fetch_json(res_code, start_date, context), start_date)
 
     for i in range(delta.days):
         day = start_date + timedelta(days=i+1)
-        data = fetch_json(day, context)
+        data = fetch_json(res_code, day, context)
         merge(res, data, day)
         csv_columns.append(f"pranzo({day})")
         csv_columns.append(f"cena({day})")
